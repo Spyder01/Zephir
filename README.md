@@ -1,19 +1,20 @@
 # Zephir CLI
 
-Zephir is a Rust-based CLI tool for packaging, unpacking, and invoking application directories in a sandboxed environment. It supports both native binaries and WebAssembly (WASM) artifacts. Zephir provides sandboxing features like CPU time, memory, and storage limits, as well as graceful shutdown.
+Zephir is a Rust-based CLI tool for packaging, unpacking, and invoking application directories in a sandboxed environment. It supports **native binaries** and **WebAssembly (WASM)** artifacts. Zephir provides sandboxing features like CPU time, memory, and storage limits, as well as graceful shutdown.
 
 ---
 
 ## Features
 
-- **Init**: Create a default configuration file.
-- **Package**: Package a directory into a `.zephir` artifact.
-- **Unpack**: Unpack a packaged artifact into a sandbox directory.
-- **Invoke**: Run the unpacked artifact inside a sandbox.
-- **Run**: Full pipeline: unpack → sandbox → invoke.
-- **Sandboxing**: Limit CPU, memory, and storage for safe execution.
-- **Graceful shutdown**: Cleans up sandbox directories on Ctrl+C.
-- **Logging**: Supports logging to stdout or file with configurable prefix and debug mode.
+* **Init**: Create a default configuration file.
+* **Package**: Package a directory into a `.zephir` artifact.
+* **Unpack**: Unpack a packaged artifact into a sandbox directory.
+* **Invoke**: Run the unpacked artifact inside a sandbox.
+* **Run**: Full pipeline: unpack → sandbox → invoke.
+* **Sandboxing**: Limit CPU, memory, and storage for safe execution.
+* **Graceful shutdown**: Cleans up sandbox directories on Ctrl+C.
+* **Logging**: Supports logging to stdout or file with configurable prefix and debug mode.
+* **WASM Support**: Run WebAssembly modules with CPU, memory, and storage limits.
 
 ---
 
@@ -25,7 +26,7 @@ Ensure you have Rust installed (Rust 1.86+ recommended).
 git clone <repository-url>
 cd zephir-rs
 cargo build --release
-````
+```
 
 This will produce a binary in `target/release/zephir-rs`.
 
@@ -44,7 +45,7 @@ function:
     entry: ./zephir-function
   bundle:
     packagePath: function.zephir
-    artifactType: NATIVE
+    artifactType: NATIVE   # or WASM
   resources:
     memory: 134217728   # 128 MB
     storage: 536870912  # 512 MB
@@ -59,6 +60,8 @@ logConfig:
   prefix: "[Zephir]"
   debugEnabled: false
 ```
+
+> For WASM artifacts, set `artifactType: WASM` and ensure the `.wasm` file exists at `packagePath`.
 
 ---
 
@@ -135,6 +138,23 @@ zephir-rs run --config ./zephir.yaml
 
 ---
 
+## WASM Support
+
+* Execute `.wasm` artifacts directly using the built-in WASM runtime.
+* CPU, memory, and storage limits are enforced inside the WASM sandbox.
+* Supports standard WASI calls and file system preopening.
+
+Example configuration for WASM:
+
+```yaml
+function:
+  bundle:
+    packagePath: function.wasm
+    artifactType: WASM
+```
+
+---
+
 ## Development
 
 * Clone the repository and build with Cargo:
@@ -175,17 +195,6 @@ src/
 
 * **Orchestration and Scaling Layer**: Add support for deploying Zephir functions in a cloud-agnostic serverless style, including bare-metal environments. This would allow multiple concurrent invocations with isolation and scaling.
 * **Hermyx Integration**: Integration with [Hermyx](https://github.com/Spyder01/Hermyx) to provide ultra-fast, single-process caching and reverse proxy support for function artifacts.
+* **Extended WASM Features**: Improve WASM runtime support including asynchronous calls, streaming input/output, and module caching.
 
 ---
-
-## License
-
-MIT License
-
----
-
-## Notes
-
-* WASM execution support is available, but the current implementation requires prebuilt `.wasm` artifacts.
-* Sandbox cleanup occurs automatically but can also be manually invoked via the API (`ZephirEngine::cleanup_sandbox`).
-
