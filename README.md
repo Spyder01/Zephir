@@ -1,6 +1,6 @@
 # Zephir CLI
 
-Zephir is a Rust-based CLI tool for packaging, unpacking, and invoking application directories in a sandboxed environment. It supports both native binaries and WebAssembly (WASM) artifacts. Zephir provides sandboxing features like CPU time, memory, and storage limits, as well as graceful shutdown on Ctrl+C.
+Zephir is a Rust-based CLI tool for packaging, unpacking, and invoking application directories in a sandboxed environment. It supports both native binaries and WebAssembly (WASM) artifacts. Zephir provides sandboxing features like CPU time, memory, and storage limits, as well as graceful shutdown.
 
 ---
 
