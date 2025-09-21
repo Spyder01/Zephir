@@ -36,7 +36,7 @@ impl ZephirEngine {
     }
 
     /// Unpack the artifact into the sandbox directory.
-    pub async fn unpack(&self) -> io::Result<String> {
+    pub async fn unpack(&self, no_cache: bool) -> io::Result<String> {
         let sane_storage_defaults = config::StorageConfig::sane_defaults();
         let storage_config = self.config.storage.as_ref().unwrap_or(&sane_storage_defaults);
 
@@ -59,11 +59,20 @@ impl ZephirEngine {
         let sandbox_dir_path = Path::new(storage_config.sandbox.as_deref().unwrap_or(sane_storage_defaults.sandbox.as_deref().unwrap()));
         let sandbox_path = path::get_atomic_sandbox_path(&sandbox_dir_path);
 
-        // Single-threaded decompression
-        compress_zstd::decompress_zstd_to_dir(&self.config.function.bundle.packagePath, sandbox_path.to_str().expect("Invalid file path"))?;
-       /* if !fs_crud::dir_exists(&artifact_cache_path).await {
-            compress_zstd::decompress_zstd_to_dir(&self.config.function.bundle.packagePath, artifact_cache_path.to_str().expect("Invalid file path"))?;
-        } */
+
+        if !no_cache && !fs_crud::dir_exists(&artifact_cache_path).await {
+            compress_zstd::decompress_zstd_to_dir(
+                &self.config.function.bundle.packagePath,
+                artifact_cache_path.to_str().expect("Invalid file path"),
+            )?;
+        }
+
+        if no_cache {
+            compress_zstd::decompress_zstd_to_dir(&self.config.function.bundle.packagePath, sandbox_path.to_str().expect("Invalid file path"))?;
+        } else {
+         fs_crud::copy_dir_recursive(&artifact_cache_path, &sandbox_path)?;
+        }
+
 
         Ok(sandbox_path.to_str().unwrap().to_string())
     }

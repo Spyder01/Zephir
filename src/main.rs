@@ -44,6 +44,8 @@ enum Commands {
     
     /// Unpack the packaged directory.
     Unpack {
+        #[arg(short, long)]
+        no_cache: bool,
         #[arg(short, long, default_value = "./zephir.yaml")]
         config: String,
     },
@@ -60,6 +62,9 @@ enum Commands {
 
     /// Run the full pipeline (unpack + sandbox + invoke)
     Run {
+        #[arg(short, long)]
+        no_cache: bool,
+
         #[arg(short, long, default_value = "./zephir.yaml")]
         config: String,
     },
@@ -99,7 +104,7 @@ async fn main() {
             }
         }
 
-        Commands::Unpack { config: cfg_path } => {
+        Commands::Unpack { no_cache, config: cfg_path } => {
             let zephir_config = match yaml::parse_yaml_from_file::<config::ZephirConfig>(&cfg_path).await {
                 Ok(c) => c,
                 Err(e) => {
@@ -109,7 +114,7 @@ async fn main() {
             };
             let engine = exec_engine::ZephirEngine::new(zephir_config);
 
-            match engine.unpack().await {
+            match engine.unpack(*no_cache).await {
                 Ok(path) => info!("Artifact unpacked to {}", path),
                 Err(e) => error!("Unpack failed: {}", e),
             }
@@ -157,7 +162,7 @@ async fn main() {
             }
         }
 
-        Commands::Run { config: cfg_path } => {
+        Commands::Run { no_cache, config: cfg_path } => {
             let zephir_config = match yaml::parse_yaml_from_file::<config::ZephirConfig>(&cfg_path).await {
                 Ok(c) => c,
                 Err(e) => {
@@ -181,7 +186,7 @@ async fn main() {
 
             tokio::select! {
                 _ = async {
-                    let sandbox_path = match engine_clone.unpack().await {
+                    let sandbox_path = match engine_clone.unpack(*no_cache).await {
                         Ok(path) => path,
                         Err(e) => {
                             error!("Failed to unpack sandbox: {}", e);
