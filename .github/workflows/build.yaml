@@ -2,7 +2,7 @@ name: Build Zephir Binaries (Linux)
 
 on:
   push:
-    tags:
+    branches:
       - "main"
   workflow_dispatch:
 
