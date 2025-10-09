@@ -11,6 +11,7 @@ pub enum ArtifactType {
     #[default]
     NATIVE,
     WASM,
+    LUA,
 } 
 
 #[derive(Debug, Deserialize, Serialize, Default)]

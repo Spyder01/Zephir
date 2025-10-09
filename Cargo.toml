@@ -25,3 +25,4 @@ clap = { version = "4", features = ["derive"] }
 env_logger = "0.10"
 wasmtime = "37"
 wasmtime-wasi = "37"
+mlua = { version = "0.11.4", features = ["luajit52"] }

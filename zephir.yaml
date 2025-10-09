@@ -1,0 +1,20 @@
+name: zephir-function
+function:
+  bundle:
+    packagePath: function.zephir
+    artifactType: LUA 
+  app:
+    entry: init.lua
+  resources:
+    memory: 134217728
+    storage: 536870912
+    cpuLimit: 10
+storage:
+  sandbox: zephir-sandbox/
+  cache: zephir-cache/
+logConfig:
+  toFile: false
+  filePath: null
+  toStdout: true
+  prefix: '[Zephir]'
+  debugEnabled: false
