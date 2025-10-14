@@ -1,42 +1,58 @@
-# Zephir CLI
+# 🧭 Zephir CLI
 
-Zephir is a **Rust-based CLI tool** for packaging, unpacking, and invoking application directories in a **sandboxed environment**.
-It supports **Native binaries**, **WebAssembly (WASM)**, and **Lua scripts**, providing fine-grained resource control and safe isolated execution.
+[![Status](https://img.shields.io/badge/status-active-success.svg)]()
+[![GitHub Issues](https://img.shields.io/github/issues/spyder01/zephir-rs.svg)](https://github.com/spyder01/zephir-rs/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/spyder01/zephir-rs.svg)](https://github.com/spyder01/zephir-rs/pulls)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+[![Hacktoberfest](https://img.shields.io/badge/Hacktoberfest-2025-blueviolet.svg)](https://hacktoberfest.com/)
+
+---
+
+## ⚙️ Overview
+
+**Zephir** is a **Rust-based CLI tool** for packaging, unpacking, and invoking application directories inside a **sandboxed environment**.
+It supports **Native binaries**, **WebAssembly (WASM)**, and **Lua scripts**, offering fine-grained resource control and secure isolated execution.
+
+Ideal for **serverless runtimes**, **sandboxed compute**, or **local function testing**.
 
 ---
 
 ## ✨ Features
 
-* **Init** — Generate a default configuration file.
-* **Package** — Package a directory into a `.zephir` artifact.
-* **Unpack** — Unpack packaged artifacts to a sandbox directory.
-* **Invoke** — Run the unpacked artifact inside a sandboxed environment.
-* **Run** — Full pipeline: unpack → sandbox → invoke.
-* **Sandboxing** — Limit **CPU time**, **memory**, and **storage** for safe isolated execution.
-* **Graceful Shutdown** — Automatically cleans up sandbox directories on `Ctrl+C`.
-* **Logging** — Structured logs to stdout or file, with configurable prefix and debug mode.
-* **WASM Support** — Run WebAssembly modules in a WASI-compliant runtime.
-* **Lua Support** — Execute sandboxed Lua scripts with safe standard libraries and Zephir-integrated logging.
+* 🏗️ **Init** — Generate a default configuration file.
+* 📦 **Package** — Package a directory into a `.zephir` artifact.
+* 📂 **Unpack** — Unpack packaged artifacts to a sandbox directory.
+* ⚙️ **Invoke** — Run unpacked artifacts inside an isolated sandbox.
+* 🚀 **Run** — Full pipeline: *unpack → sandbox → invoke*.
+* 🔒 **Sandboxing** — CPU, memory, and storage limits for safe execution.
+* 🧹 **Graceful Shutdown** — Cleans up sandbox directories automatically.
+* 🪵 **Logging** — Structured logs with prefix and debug support.
+* 🌐 **WASM Support** — Run WebAssembly modules using a WASI-compliant runtime.
+* 🌀 **Lua Support** — Execute sandboxed Lua scripts securely.
 
 ---
 
 ## ⚙️ Installation
 
-Ensure Rust (v1.86+) is installed:
+Ensure **Rust (v1.86+)** is installed.
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/spyder01/zephir-rs.git
 cd zephir-rs
 cargo build --release
 ```
 
-This builds the binary at `target/release/zephir-rs`.
+The compiled binary will be available at:
+
+```
+target/release/zephir-rs
+```
 
 ---
 
 ## 🧩 Configuration
 
-Zephir uses a YAML configuration file (default: `zephir.yaml`).
+Zephir uses a **YAML configuration file** (default: `zephir.yaml`).
 
 ### Example Configuration
 
@@ -57,151 +73,118 @@ storage:
   cache: zephir-cache/
 logConfig:
   toFile: false
-  filePath: null
   toStdout: true
   prefix: "[Zephir]"
   debugEnabled: false
 ```
 
-> Supported `artifactType`:
->
-> * `NATIVE` — for binaries/executables
-> * `WASM` — for `.wasm` modules
-> * `LUA` — for `.lua` scripts
+Supported `artifactType` values:
+
+* `NATIVE` — Compiled executables
+* `WASM` — WebAssembly modules
+* `LUA` — Lua scripts
 
 ---
 
 ## 🧭 CLI Commands
 
-### 1. Initialize configuration
+### 🔧 Initialize configuration
 
 ```bash
 zephir-rs init --output ./zephir.yaml
 ```
 
-Generates a default configuration if it doesn’t exist.
-
----
-
-### 2. Package a directory
+### 📦 Package a directory
 
 ```bash
 zephir-rs package --dir ./my-function --output ./function.zephir
 ```
 
-Packages a directory into a `.zephir` compressed artifact.
-
----
-
-### 3. Unpack an artifact
+### 📂 Unpack an artifact
 
 ```bash
 zephir-rs unpack --config ./zephir.yaml
 ```
 
-Unpacks the artifact defined in the config into the sandbox directory.
-
----
-
-### 4. Invoke an artifact
+### ⚙️ Invoke an artifact
 
 ```bash
 zephir-rs invoke --sandbox ./zephir-sandbox --config ./zephir.yaml --args arg1 arg2
 ```
 
-Runs the unpacked artifact in the sandbox.
-Graceful shutdown is supported — `Ctrl+C` automatically cleans the sandbox.
-
----
-
-### 5. Run (Full Pipeline)
+### 🚀 Run (Full Pipeline)
 
 ```bash
 zephir-rs run --config ./zephir.yaml
 ```
 
-Runs the **unpack → sandbox → invoke** pipeline automatically.
-
 ---
 
-## 🪵 Logging
+## 🪵 Logging Configuration
 
-Zephir logs can be customized via `logConfig`:
-
-| Option         | Description              |
-| -------------- | ------------------------ |
-| `toFile`       | Write logs to file       |
-| `filePath`     | Path to log file         |
-| `toStdout`     | Print logs to stdout     |
-| `prefix`       | Log prefix label         |
-| `debugEnabled` | Enables debug-level logs |
+| Option         | Description                   |
+| -------------- | ----------------------------- |
+| `toFile`       | Write logs to a file          |
+| `filePath`     | Path to log file (if enabled) |
+| `toStdout`     | Print logs to stdout          |
+| `prefix`       | Log prefix label              |
+| `debugEnabled` | Enables verbose logging       |
 
 ---
 
 ## 🧱 Sandboxing
 
-Zephir enforces:
+Zephir isolates execution using strict sandboxing controls:
 
-* **CPU limits** via execution fuel or process control.
-* **Memory caps** on WASM/Lua/Native processes.
-* **Storage limits** per sandbox directory.
-
-Sandbox directories are **automatically cleaned** after completion or interruption.
+* **CPU limit:** via fuel counters or process control
+* **Memory cap:** on WASM, Lua, and native executables
+* **Storage quota:** per sandbox directory
+* **Automatic cleanup:** on completion or interruption
 
 ---
 
 ## 🧬 Execution Modes
 
-### 1. Native Execution
-
-Runs compiled executables (`artifactType: NATIVE`).
+### 🔹 Native Execution
 
 ```yaml
 artifactType: NATIVE
 entry: ./my_binary
 ```
 
-Streams stdout/stderr in real time, respecting resource limits.
+Runs local executables with real-time stdout/stderr streaming and enforced resource limits.
 
 ---
 
-### 2. WebAssembly Execution
-
-Runs `.wasm` modules using **Wasmtime + WASI**.
+### 🔹 WebAssembly Execution
 
 ```yaml
 artifactType: WASM
 entry: ./module.wasm
 ```
 
-* Supports WASI system calls.
-* Preopens sandbox directory (`/sandbox`).
-* CPU, memory, and file system limits enforced.
-* Graceful start/stop with Zephir logging.
+* Uses **Wasmtime + WASI**
+* Preopens `/sandbox` directory
+* Enforces CPU, memory, and file I/O limits
+* Supports graceful shutdowns
 
 ---
 
-### 3. Lua Execution
-
-Runs `.lua` scripts safely inside a sandboxed Lua runtime.
+### 🔹 Lua Execution
 
 ```yaml
 artifactType: LUA
 entry: ./main.lua
 ```
 
-* Uses [`mlua`](https://crates.io/crates/mlua) with **safe standard libraries only**.
-* `print()` is redirected to Zephir’s logger.
-* Access to sandboxed paths only.
-* `sandbox_path` is exposed to the Lua script’s global scope.
+Runs sandboxed Lua scripts using [`mlua`](https://crates.io/crates/mlua) with restricted standard libraries.
 
-#### Example Lua Script
+#### Example
 
 ```lua
 print("Hello from Lua!")
 print("Sandbox path:", sandbox_path)
 
--- Example: create a file in sandbox
 local f = io.open(sandbox_path .. "/output.txt", "w")
 f:write("Lua execution complete.")
 f:close()
@@ -232,16 +215,82 @@ src/
 
 ## 🧰 Requirements
 
-* Rust 1.86+
-* Linux / macOS (sandbox uses Unix features)
-* (Optional) Wasmtime for WASM runtime
+* 🦀 Rust 1.86+
+* 🧠 Linux / macOS (Unix sandboxing features)
+* 🧩 (Optional) Wasmtime for WASM runtime
 
 ---
 
-## 🚀 Future Plans
+## 🎯 Roadmap
 
-* **Orchestration Layer**: Cloud/serverless scaling for concurrent invocations.
-* **Hermyx Integration**: Use [Hermyx](https://github.com/Spyder01/Hermyx) for ultra-fast caching and proxying of function artifacts.
-* **Extended WASM Runtime**: Async I/O, streaming, module caching.
-* **Lua Sandboxing Enhancements**: Support user-defined safe APIs, timeouts, and isolated FS contexts.
+* [ ] Add network namespace sandboxing
+* [ ] WASM async I/O and streaming support
+* [ ] Lua execution timeout controls
+* [ ] Hermyx integration for cached artifact serving
+* [ ] Add example templates for NATIVE / WASM / LUA projects
 
+---
+
+## 🎃 Hacktoberfest 2025 — Contribute & Learn!
+
+We’re participating in **Hacktoberfest 2025**!
+If you’re a systems, Rust, or WASM enthusiast — this is the perfect time to contribute 🚀
+
+### 🧩 Good First Issues
+
+Check them out here 👉 [Good First Issues](https://github.com/spyder01/zephir-rs/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+
+### 🛠 Ways to Contribute
+
+* 🦀 Implement new **sandboxing features**
+* ⚙️ Improve **WASM or Lua execution engines**
+* 🧪 Add **unit/integration tests**
+* 🧾 Improve **documentation and examples**
+* 🧰 Build **utility commands** (e.g., resource inspector)
+* 🌐 Add **demo projects** for all artifact types
+
+### 🧠 How to Get Started
+
+1. **Fork** the repo
+2. **Clone** your fork
+
+   ```bash
+   git clone https://github.com/<your-username>/zephir-rs.git
+   ```
+3. **Create a branch**
+
+   ```bash
+   git checkout -b feature/add-wasm-limits
+   ```
+4. **Build & test**
+
+   ```bash
+   cargo run -- init
+   cargo test
+   ```
+5. **Commit & push**
+
+   ```bash
+   git commit -m "Add CPU limit enforcement for WASM"
+   git push origin feature/add-wasm-limits
+   ```
+6. **Open a Pull Request** 🎉
+
+---
+
+## 🧑‍💻 Maintainer
+
+**[@spyder01](https://github.com/spyder01)**
+
+---
+
+## 📄 License
+
+Licensed under the **MIT License** — see [LICENSE](./LICENSE) for details.
+
+---
+
+## 🌟 Support the Project
+
+If you like **Zephir**, give it a ⭐ on GitHub!
+It helps others discover the project and supports ongoing development.
