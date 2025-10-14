@@ -238,7 +238,7 @@ If you’re a systems, Rust, or WASM enthusiast — this is the perfect time to 
 
 ### 🧩 Good First Issues
 
-Check them out here 👉 [Good First Issues](https://github.com/spyder01/zephir-rs/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+Check them out here 👉 [Good First Issues](https://github.com/spyder01/zephir/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
 ### 🛠 Ways to Contribute
 
