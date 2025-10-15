@@ -1,8 +1,8 @@
 # 🧭 Zephir CLI
 
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![GitHub Issues](https://img.shields.io/github/issues/spyder01/zephir-rs.svg)](https://github.com/spyder01/zephir-rs/issues)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/spyder01/zephir-rs.svg)](https://github.com/spyder01/zephir-rs/pulls)
+[![GitHub Issues](https://img.shields.io/github/issues/spyder01/zephir.svg)](https://github.com/spyder01/zephir/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/spyder01/zephir.svg)](https://github.com/spyder01/zephir/pulls)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 [![Hacktoberfest](https://img.shields.io/badge/Hacktoberfest-2025-blueviolet.svg)](https://hacktoberfest.com/)
 
